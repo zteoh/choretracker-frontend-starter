@@ -2,3 +2,12 @@
   width: 50%;
   margin: 50px auto;
 }
+
+table {
+	padding: 30px 0px;
+}
+
+th {
+	text-align: left;
+	padding-bottom: 10px;
+}
