@@ -22,14 +22,14 @@ export const chores = [
 	{child: "Mark", task: "Garden", due_on: "2018-04-09", completed: false}
 ];
 
-export const addChore = (newChore) => {
+export const addChoreAPI = (newChore) => {
 	chores.push(newChore)
 }
 
-export const toggleComplete = (index) => {
+export const toggleCompleteAPI = (index) => {
 	chores[index].completed = !chores[index].completed
 }
 
-export const deleteChore = (index) => {
+export const deleteChoreAPI = (index) => {
 	chores.splice(index, 1)
 }
