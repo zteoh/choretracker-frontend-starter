@@ -6,7 +6,7 @@ In the project directory, you can run: `npm install` and `npm start`
 2. Go into the project directory and run `npm install` and `npm start`
 3. Head over to `localhost:3000` (React uses the same port as Rails) and you should see a basic Chore Tracker.
 
-![Basic Chore Tracker](https://imgur.com/CLUtFdl)
+![Basic Chore Tracker](https://imgur.com/CLUtFdl.png)
 
 # Part 2: Completing and Deleting a Chore
 1. When users click on the `Check` button in the Chore Tracker table, they should be able to toggle the `Completed` value of the specific chore. There are a few steps we would have to take to complete this.
@@ -42,11 +42,12 @@ In the project directory, you can run: `npm install` and `npm start`
 
 3. Head over to your application and open up the developer tool to make sure that the `showForm` state can successfully be toggled when the `New Chore` button is clicked.
 
-![showForm state toggle](https://imgur.com/jM2nJxJ)
+![showForm state toggle](https://imgur.com/jM2nJxJ.png)
 
 4. Now, we would want to create the `NewChoreForm` Component. Create a new file `NewChoreForm.js` in `src/components/` and `NewChoreForm.css` in `src/style/`.
 
     In `NewChoreForm.js`, add the following code: 
+    
     ```
     import React from "react"
     import { children } from "../api";
@@ -83,9 +84,7 @@ In the project directory, you can run: `npm install` and `npm start`
                 )
             })
         }
-
         // TODO: renderTasksOptions function
-
         render() {
             return (
                 <div className="chore-form">
@@ -96,7 +95,6 @@ In the project directory, you can run: `npm install` and `npm start`
                         { this.renderChildrenOptions() }
                       </select>
                     </div>
-
                     
                     <br />
                     <button onClick={this.onSubmit}>Submit</button>
@@ -128,7 +126,7 @@ In the project directory, you can run: `npm install` and `npm start`
 
 7. At this point, when you click on `New Chore`, you should be able to toggle a minimal New Chore Form. 
 
-![Simple NewChorForm](https://imgur.com/teVPaPH)
+![Minimal New Chore Form](https://i.imgur.com/XhTIhXf.png)
 
 # Part 4: Adding a new Chore
 
@@ -140,7 +138,7 @@ In the project directory, you can run: `npm install` and `npm start`
 
     Your application should look something like this:
 
-    ![NewChoreForm Setup](https://imgur.com/XhTIhXf)
+    ![NewChoreForm Setup](https://imgur.com/XhTIhXf.png)
 
 3. Our form works and we can keep track of the form inputs! Now, we would want to be able to submit the form. Take a look at what is triggered when we click on the submit button (`<button onClick={this.onSubmit}>Submit</button>`) and figure out which helper function from `api.js` we can use to add a new chore.
 
