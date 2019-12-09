@@ -9,36 +9,20 @@ In the project directory, you can run: `npm install` and `npm start`
 ![Basic Chore Tracker](https://imgur.com/CLUtFdl.png)
 
 # Part 2: Completing and Deleting a Chore
-1. When users click on the `Check` button in the Chore Tracker table, they should be able to toggle the `Completed` value of the specific chore. There are a few steps we would have to take to complete this.
+When users click on the `Check` button in the Chore Tracker table, they should be able to toggle the `Completed` value of the specific chore. There are a few steps we would have to take to complete this.
 
-2. Open up `Chores.js` and add `onClick={() => this.toggleComplete(index)}` in the opening `<td>` tag for the `Check` button.
+1. Add an `onClick` trigger to the appropriate button
+2. Define an anonymous function `toggleComplete` which calls `toggleCompleteAPI`
+3. Try this out on your application. (something to do with needing to refresh - pages rerender only when state changes. Since `chores` is a prop passed down from the `App` Component to the `Chores` Component, when the prop changes, it does not rerender the `Chores` component) Add in `this.forceUpdate()` after you call `toggleCompleteAPI`
 
-3. Next, we would need to create an _anonymous function_ `toggleComplete` which will take in a chore `index` and call the helper function `toggleCompleteAPI` which is defined in `src/api.js`. Hint: how do you import your helper function from `api.js` to `Chores.js`?
-
-4. Try this out on your application. (something to do with needing to refresh - pages rerender only when state changes. Since `chores` is a prop passed down from the `App` Component to the `Chores` Component, when the prop changes, it does not rerender the `Chores` component) Add in `this.forceUpdate()` after you call `toggleCompleteAPI`
-
-3. Similarly, try implementing the `Delete` button in the Chore Tracker table.
+Similarly, try implementing the `Delete` button in the Chore Tracker table.
 
 # Part 3: Showing and Hiding NewChoreForm
 1. First, we would need to keep track of a state of whether the form is open by creating a `showForm` state in `Chore.js`.
-    ```
-    state = { 
-        showForm: false
-    }
-    ```
-2. When the `New Chore` button is clicked, we would want to toggle the `showForm` state. Let's first modify the `<button>` tag.
-    
-    Your button should look like this `<button onClick={this.toggleForm} >New Chore</button>`
 
-    Next, create a function `toggleForm` that would be triggered when the `New Chore` button is clicked.
-
-    ```
-    toggleForm = () => {
-        this.setState(prevState => ({
-            showForm: !prevState.showForm
-        }));
-    }
-    ```
+2. When the `New Chore` button is clicked, we would want to toggle the `showForm` state. In order to do this, you would need to:
+    * Add an `onClick` trigger to the button and
+    * Define a `toggleForm` function.
 
 3. Head over to your application and open up the developer tool to make sure that the `showForm` state can successfully be toggled when the `New Chore` button is clicked.
 
@@ -134,46 +118,14 @@ In the project directory, you can run: `npm install` and `npm start`
 
 2. A `chore` has `child`, `task`, `due_on` and `completed`. Our `NewChoreForm` currently only has a `child` form input. Figure out how would you incorporate `task` and `due_on` into your form. (You can assume that `completed` is default to `false`, but if you are up for the challenge, try implementing it. Hint: you might need to modify the `handleInputChange` method)
 
-    Hint: You would need to (1) Add in form inputs in the `render` function and (2) Handle form input changes.
+    Hint: You would need to:
+    * Add in form inputs in the `render` function and
+    * Handle form input changes.
 
     Your application should look something like this:
 
     ![NewChoreForm Setup](https://imgur.com/XhTIhXf.png)
 
-3. Our form works and we can keep track of the form inputs! Now, we would want to be able to submit the form. Take a look at what is triggered when we click on the submit button (`<button onClick={this.onSubmit}>Submit</button>`) and figure out which helper function from `api.js` we can use to add a new chore.
-
-    ```
-    export const addChoreAPI = (newChore) => {
-        chores.push(newChore)
-    }
-    ```
-
-    We can see that `addChoreAPI` takes in a newChore and pushes it to `chores`, which is an array of chore objects (that look something like `{child: "Mark", task: "Sweep", due_on: "2018-04-09", completed: false}`). This means that the `newChore` parameter we pass in should be of the same format.
-
-    In the `onSubmit` method in `NewChoreForm.js`, create your `newChore`
-
-    ```
-    const newChore = {
-        child: this.state.child, 
-        task: this.state.task,
-        due_on: this.state.due_on, 
-        completed: this.state.completed
-    }
-    ```
-
-4. We can now use this `newChore` to call `addChoreAPI`. Try this out and see whether it works. Why does it not? Should the `addChoreAPI` call be made in `NewChoreForm` or `Chores`? (The answer is `Chores`, but do you know why?)
-
-5. First, let us modify create a `addChore` method in `Chores`
-
-    ```
-    addChore = (newChore) => {
-        addChoreAPI(newChore)
-        this.toggleForm() // Hide the chore form after the chore is added
-    }
-    ```
-
-5. Next, let us pass this method to `NewChoreForm` by modifying the `render` method to be `<NewChoreForm onSubmit = { this.addChore } />`. What we are doing here is to pass down the `addChore` method from `Chores` to `NewChoreForm` as a `prop`.
-
-6. In your `onSubmit` method in `NewChoreForm`, call `addChore` using `this.props.onSubmit(newChore);`
-
+3. Our form works and we can keep track of the form inputs!
+4. Now, we would want to be able to submit the form. Refer to the [sample Profile application](https://github.com/kdchin/profile-frontend) and how the profile is editted successfully in order to implement the submission of a new chore form.
 5. And you're done! (Hopefully)
