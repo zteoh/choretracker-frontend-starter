@@ -2,7 +2,7 @@
 In the project directory, you can run: `npm install` and `npm start`
 
 # Part 1: Running the React Application
-1. Get the starter code from [github](https://github.com/zteoh/choretracker-frontend-starter) and install the [React Developer Tool for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
+1. Get the starter code from [Github](https://github.com/zteoh/choretracker-frontend-starter) and install the [React Developer Tool for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
 2. Go into the project directory and run `npm install` and `npm start`
 3. Head over to `localhost:3000` (React uses the same port as Rails) and you should see a basic Chore Tracker.
 
@@ -13,11 +13,34 @@ In the project directory, you can run: `npm install` and `npm start`
 
 2. Open up `Chores.js` and add `onClick={() => this.toggleComplete(index)}` in the opening `<td>` tag for the `Check` button.
 
-3. Next, we would need to create an _anonymous function_ `toggleComplete` which will take in a chore `index` and call the helper function `toggleCompleteAPI` which is defined in `src/api.js`. Hint: how do you import your helper function from `api.js` to `Chores.js`?
+    Your code should now look like this:
+    ```
+    <td width="50" onClick={() => this.toggleComplete(index)}>Check</td>
+    ```
 
-4. Try this out on your application. (something to do with needing to refresh - pages rerender only when state changes. Since `chores` is a prop passed down from the `App` Component to the `Chores` Component, when the prop changes, it does not rerender the `Chores` component) Add in `this.forceUpdate()` after you call `toggleCompleteAPI`
+3. Next, we would need to create an _anonymous function_ `toggleComplete` which will take in a chore `index` and call the helper function `toggleCompleteAPI` which is defined in `src/api.js`. 
 
-3. Similarly, try implementing the `Delete` button in the Chore Tracker table.
+    First, lets import your helper function from `api.js` to `Chores.js` by adding `import { toggleCompleteAPI } from "../api";` to the top of your file.
+
+    Second, lets create the `toggleComplete` function
+
+    ```
+    toggleComplete = (index) => {
+        toggleCompleteAPI(index)
+    }
+    ```
+
+
+4. Try this out on your application. (something to do with needing to refresh - pages rerender only when state changes. Since `chores` is a prop passed down from the `App` Component to the `Chores` Component, when the prop changes, it does not rerender the `Chores` component) Add in `this.forceUpdate()` after you call `toggleCompleteAPI`. Your function should now look like this:
+
+    ```
+    toggleComplete = (index) => {
+        toggleCompleteAPI(index)
+        this.forceUpdate() // "Refetch" data
+    }
+    ```
+
+3. Similarly, try implementing the `Delete` button in the Chore Tracker table, remembering that you need to first import the helper function from `api.js`.
 
 # Part 3: Showing and Hiding NewChoreForm
 1. First, we would need to keep track of a state of whether the form is open by creating a `showForm` state in `Chore.js`.
@@ -120,7 +143,9 @@ In the project directory, you can run: `npm install` and `npm start`
     }
     ```
 
-5. Now that we have the `NewChoreForm` Component, try connecting it to the `Chores` Component by adding `<NewChoreFrom />`  in the `render` method. Hint: remember to import the component!
+5. Now that we have the `NewChoreForm` Component, try connecting it to the `Chores` Component by adding `<NewChoreFrom />`  in the `render` method. 
+
+    Remember to import the `NewChoreForm` Component in `Chores.js` by adding `import NewChoreForm from './NewChoreForm';` at the top of `Chores.js`!
 
 6. However, we only want to be able to toggle the `NewChoreForm` when we click on the `New Chores` button. Try implementing this function!
 
@@ -140,8 +165,9 @@ In the project directory, you can run: `npm install` and `npm start`
 
     ![NewChoreForm Setup](https://imgur.com/XhTIhXf.png)
 
-3. Our form works and we can keep track of the form inputs! Now, we would want to be able to submit the form. Take a look at what is triggered when we click on the submit button (`<button onClick={this.onSubmit}>Submit</button>`) and figure out which helper function from `api.js` we can use to add a new chore.
+3. Our form works and we can keep track of the form inputs! Now, we would want to be able to submit the form. Take a look at what is triggered when we click on the submit button (`<button onClick={this.submitChoreForm}>Submit</button>`) and figure out which helper function from `api.js` we can use to add a new chore.
 
+    In `api.js`, find the following function `addChoreAPI`:
     ```
     export const addChoreAPI = (newChore) => {
         chores.push(newChore)
@@ -150,7 +176,7 @@ In the project directory, you can run: `npm install` and `npm start`
 
     We can see that `addChoreAPI` takes in a newChore and pushes it to `chores`, which is an array of chore objects (that look something like `{child: "Mark", task: "Sweep", due_on: "2018-04-09", completed: false}`). This means that the `newChore` parameter we pass in should be of the same format.
 
-    In the `onSubmit` method in `NewChoreForm.js`, create your `newChore`
+    In the `submitChoreForm` method in `NewChoreForm.js`, create your `newChore`
 
     ```
     const newChore = {
