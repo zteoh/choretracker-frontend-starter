@@ -26,32 +26,30 @@ In the project directory, you can run: `npm install` and `npm start`
 
     ```
     toggleComplete = (index) => {
-        toggleCompleteAPI(index)
-    }
+		const newChores = toggleCompleteAPI(this.state.chores, index);
+
+		this.setState({ chores: newChores });
+	}
     ```
 
+    Now, go to `localhost:3000` and make sure `Check`-ing a chore would change the `completed` status.
 
-4. Try this out on your application. (something to do with needing to refresh - pages rerender only when state changes. Since `chores` is a prop passed down from the `App` Component to the `Chores` Component, when the prop changes, it does not rerender the `Chores` component) Add in `this.forceUpdate()` after you call `toggleCompleteAPI`. Your function should now look like this:
-
-    ```
-    toggleComplete = (index) => {
-        toggleCompleteAPI(index)
-        this.forceUpdate() // "Refetch" data
-    }
-    ```
-
-3. Similarly, try implementing the `Delete` button in the Chore Tracker table, remembering that you need to first import the helper function from `api.js`.
+4. Similarly, try implementing the `Delete` button in the Chore Tracker table, remembering that you need to first import the helper function from `api.js`. (Hint: Look at step 3 if you are having problems)
 
 # Part 3: Showing and Hiding NewChoreForm
 1. First, we would need to keep track of a state of whether the form is open by creating a `showForm` state in `Chore.js`.
+
+    Your state should now look like this:
+
     ```
     state = { 
+        chores: this.props.initialChores
         showForm: false
     }
     ```
 2. When the `New Chore` button is clicked, we would want to toggle the `showForm` state. Let's first modify the `<button>` tag.
     
-    Your button should look like this `<button onClick={this.toggleForm} >New Chore</button>`
+    Your button should look like this `<button onClick={this.toggleForm}>New Chore</button>`
 
     Next, create a function `toggleForm` that would be triggered when the `New Chore` button is clicked.
 
@@ -95,8 +93,8 @@ In the project directory, you can run: `npm install` and `npm start`
             });
         }
 
-        onSubmit = () => {
-            // TODO : create a newChore and pass it to this.props.onSubmit
+        submitChoreForm = () => {
+            // TODO : create a newChore and pass it to this.props.addNewChore
         }
 
         // Render Helper Methods
@@ -120,7 +118,7 @@ In the project directory, you can run: `npm install` and `npm start`
                     </div>
                     
                     <br />
-                    <button onClick={this.onSubmit}>Submit</button>
+                    <button onClick={this.submitChoreForm}>Submit</button>
               </div>
             )
         }
@@ -143,11 +141,21 @@ In the project directory, you can run: `npm install` and `npm start`
     }
     ```
 
-5. Now that we have the `NewChoreForm` Component, try connecting it to the `Chores` Component by adding `<NewChoreFrom />`  in the `render` method. 
+5. Now that we have the `NewChoreForm` Component, try connecting it to the `Chores` Component by adding `<NewChoreForm />`  in the `render` method, below the `New Chore` button. 
 
     Remember to import the `NewChoreForm` Component in `Chores.js` by adding `import NewChoreForm from './NewChoreForm';` at the top of `Chores.js`!
 
 6. However, we only want to be able to toggle the `NewChoreForm` when we click on the `New Chores` button. Try implementing this function!
+
+    Were you able to do it on your own?
+
+    What you had to do is to use the `showForm` state like so:
+
+    ```
+    { this.state.showForm && <NewChoreForm />}
+    ```
+
+    When `this.state.showForm` is true, the `NewChoreForm` will be displayed. Else, the condition will short-circuit and the `NewChoreForm` will not be rendered.
 
 7. At this point, when you click on `New Chore`, you should be able to toggle a minimal New Chore Form. 
 
@@ -157,24 +165,38 @@ In the project directory, you can run: `npm install` and `npm start`
 
 1. We want to be able to add a new Chore using the New Chore Form. Open the application and observe the state of `NewChoreForm` when you change the `child` form input. Trace the code and figure out what is happening.
 
-2. A `chore` has `child`, `task`, `due_on` and `completed`. Our `NewChoreForm` currently only has a `child` form input. Figure out how would you incorporate `task` and `due_on` into your form. (You can assume that `completed` is default to `false`, but if you are up for the challenge, try implementing it. Hint: you might need to modify the `handleInputChange` method)
+2. A `chore` has `child`, `task`, `due_on` and `completed`. 
 
-    Hint: You would need to (1) Add in form inputs in the `render` function and (2) Handle form input changes.
+    Our `NewChoreForm` currently only has a `child` form input. Figure out how would you incorporate `task` and `due_on` into your form. (You can assume that `completed` is default to `false`, but if you are up for the challenge, try implementing it. Hint: you might need to modify the `handleInputChange` method)
+
+    Hint: You would need to:
+
+    (1) Import relevant data like `tasks` from `api.js`
+
+    (2) Add addition states like `task` and `due_on`
+
+    (3) Add in form inputs in the `render` function (Hint: You can use `<input type="date">` for `due_on` input)
+
+    (4) Handle form input changes.
 
     Your application should look something like this:
 
     ![NewChoreForm Setup](https://imgur.com/XhTIhXf.png)
 
-3. Our form works and we can keep track of the form inputs! Now, we would want to be able to submit the form. Take a look at what is triggered when we click on the submit button (`<button onClick={this.submitChoreForm}>Submit</button>`) and figure out which helper function from `api.js` we can use to add a new chore.
+3. Our form works and we can keep track of the form inputs! Now, we would want to be able to submit the form. 
 
-    In `api.js`, find the following function `addChoreAPI`:
+    Take a look at what is triggered when we click on the submit button (`<button onClick={this.submitChoreForm}>Submit</button>`) and figure out which helper function from `api.js` we can use to add a new chore.
+
+    In `api.js`, **find** the following function `addChoreAPI`:
     ```
-    export const addChoreAPI = (newChore) => {
-        chores.push(newChore)
+    export const addChoreAPI = (oldChores, newChore) => {
+        const newChores = [...oldChores];
+        newChores.push(newChore)
+        return newChores
     }
     ```
 
-    We can see that `addChoreAPI` takes in a newChore and pushes it to `chores`, which is an array of chore objects (that look something like `{child: "Mark", task: "Sweep", due_on: "2018-04-09", completed: false}`). This means that the `newChore` parameter we pass in should be of the same format.
+    Since chore objects look like `{child: "Mark", task: "Sweep", due_on: "2018-04-09", completed: false}`, the `newChore` parameter we pass in should be of the same format.
 
     In the `submitChoreForm` method in `NewChoreForm.js`, create your `newChore`
 
@@ -183,23 +205,43 @@ In the project directory, you can run: `npm install` and `npm start`
         child: this.state.child, 
         task: this.state.task,
         due_on: this.state.due_on, 
-        completed: this.state.completed
+        completed: false
     }
     ```
 
 4. We can now use this `newChore` to call `addChoreAPI`. Try this out and see whether it works. Why does it not? Should the `addChoreAPI` call be made in `NewChoreForm` or `Chores`? (The answer is `Chores`, but do you know why?)
 
-5. First, let us modify create a `addChore` method in `Chores`
+5. First, let us create a `addChore` method in `Chores.js`
 
     ```
-    addChore = (newChore) => {
-        addChoreAPI(newChore)
-        this.toggleForm() // Hide the chore form after the chore is added
-    }
+    addNewChore = (newChore) => {
+		this.setState(prevState => ({
+			chores: addChoreAPI(prevState.chores, newChore)
+		}));
+		this.toggleForm() // Hide the chore form after the chore is added
+	}
     ```
 
-5. Next, let us pass this method to `NewChoreForm` by modifying the `render` method to be `<NewChoreForm onSubmit = { this.addChore } />`. What we are doing here is to pass down the `addChore` method from `Chores` to `NewChoreForm` as a `prop`.
+    Since `addNewChore` calls `addChoreAPI`, remember to import it from `api.js` at the top of `Chores.js`
 
-6. In your `onSubmit` method in `NewChoreForm`, call `addChore` using `this.props.onSubmit(newChore);`
+5. Next, let us pass this method to `NewChoreForm` by modifying the `render` method in `Chores.js` to be `<NewChoreForm addNewChore={this.addNewChore} />`. What we are doing here is to pass down the `addNewChore` method from `Chores` to `NewChoreForm` as a `prop`.
+
+6. In your `submitChoreForm` method in `NewChoreForm.js`, call `addNewChore` using `this.props.addNewChore(newChore);;`
+
+    Now, your `submitChoreForm` method should look like this
+
+    ```
+    submitChoreForm = () => {
+		// TODO : create a newChore and pass it to this.props.onSubmit
+		const newChore = {
+			child: this.state.child, 
+			task: this.state.task,
+			due_on: this.state.due_on, 
+			completed: this.state.completed
+		}
+
+		this.props.addNewChore(newChore);
+	}
+    ```
 
 5. And you're done! (Hopefully)

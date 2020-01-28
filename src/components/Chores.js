@@ -3,8 +3,13 @@ import '../style/Chores.css';
 
 class Chores extends React.Component {
 
+	// Constructor
+	state = { 
+		chores: this.props.initialChores
+	}
+
 	showChores = () => {
-		return this.props.chores.map((chore, index) => {
+		return this.state.chores.map((chore, index) => {
 	        return (
 	        	<tr key={index} >
 	        	<td width="125">{chore.child}</td>

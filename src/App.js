@@ -2,13 +2,13 @@ import React from 'react';
 import './App.css';
 
 import Chores from './components/Chores'
-import { chores } from "./api";
+import { initalChores } from "./api";
 
 function App() {
   return (
     <div className="App">
       <Chores 
-        chores = {chores}
+      initialChores = {initalChores}
       />
     </div>
   );
