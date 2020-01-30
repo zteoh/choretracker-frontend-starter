@@ -23,19 +23,19 @@ export const initalChores = [
 ];
 
 export const addChoreAPI = (oldChores, newChore) => {
-	const newChores = [...oldChores];
+	const newChores = [...oldChores]; // syntactic sugar for copying a list
 	newChores.push(newChore)
 	return newChores
 }
 
 export const toggleCompleteAPI = (oldChores, index) => {
-	const newChores = [...oldChores];
+	const newChores = [...oldChores]; // syntactic sugar for copying a list
 	newChores[index].completed = !newChores[index].completed;
 	return newChores
 }
 
 export const deleteChoreAPI = (oldChores, index) => {
-	const newChores = [...oldChores];
+	const newChores = [...oldChores]; // syntactic sugar for copying a list
 	newChores.splice(index, 1)
 	return newChores
 }
